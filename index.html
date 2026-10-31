@@ -1,516 +1,101 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#05070a" />
-  <title>G‑SPORT — Real Watch Experience</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
-
-    :root{
-      --bg:#05070a;
-      --panel:#0c1016;
-      --text:#f6f7f8;
-      --muted:#9aa3ad;
-      --line:rgba(255,255,255,.12);
-      --blue:#4b8cff;
-      --blue-soft:#a9c6ff;
-    }
-
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth;background:var(--bg)}
-    body{
-      background:var(--bg);
-      color:var(--text);
-      font-family:Inter,Arial,sans-serif;
-      overflow-x:hidden;
-    }
-    a{color:inherit;text-decoration:none}
-    button{font:inherit}
-
-    .nav{
-      position:fixed;
-      top:0;left:0;right:0;
-      z-index:50;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:20px 4vw;
-      background:linear-gradient(to bottom,rgba(5,7,10,.82),rgba(5,7,10,0));
-      pointer-events:none;
-    }
-    .brand{
-      font-family:Manrope,sans-serif;
-      font-weight:800;
-      letter-spacing:.18em;
-      font-size:15px;
-    }
-    .nav small{color:#c9d0d8;letter-spacing:.14em;font-size:10px}
-
-    .hero{
-      min-height:100svh;
-      position:relative;
-      display:flex;
-      align-items:flex-end;
-      overflow:hidden;
-      background:#0a0b0d;
-    }
-    .hero-image{
-      position:absolute;
-      inset:0;
-      background-image:url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&fm=jpg&q=88&w=3000');
-      background-size:cover;
-      background-position:center;
-      transform:scale(1.04);
-      animation:heroFloat 12s ease-in-out infinite alternate;
-    }
-    @keyframes heroFloat{
-      from{transform:scale(1.04) translate3d(0,0,0)}
-      to{transform:scale(1.1) translate3d(-1.5%,1%,0)}
-    }
-    .hero::after{
-      content:"";
-      position:absolute;inset:0;
-      background:
-        linear-gradient(90deg,rgba(3,5,8,.88) 0%,rgba(3,5,8,.45) 42%,rgba(3,5,8,.08) 70%),
-        linear-gradient(0deg,rgba(3,5,8,.92) 0%,rgba(3,5,8,0) 58%);
-    }
-    .hero-content{
-      position:relative;
-      z-index:2;
-      width:min(1220px,92vw);
-      margin:0 auto;
-      padding:0 0 8vh;
-    }
-    .kicker{
-      color:var(--blue-soft);
-      text-transform:uppercase;
-      letter-spacing:.28em;
-      font-size:11px;
-      font-weight:600;
-      margin-bottom:18px;
-    }
-    h1,h2{
-      font-family:Manrope,sans-serif;
-      letter-spacing:-.055em;
-    }
-    h1{
-      font-size:clamp(64px,11vw,170px);
-      line-height:.82;
-      max-width:1000px;
-    }
-    .hero-copy{
-      display:flex;
-      gap:48px;
-      align-items:flex-end;
-      justify-content:space-between;
-      margin-top:34px;
-      border-top:1px solid var(--line);
-      padding-top:22px;
-    }
-    .hero-copy p{
-      max-width:520px;
-      color:#d4d9df;
-      line-height:1.65;
-      font-size:15px;
-    }
-    .scroll-note{
-      color:var(--muted);
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.22em;
-      white-space:nowrap;
-    }
-
-    .section{
-      width:min(1220px,92vw);
-      margin:0 auto;
-      padding:130px 0;
-    }
-    .section-head{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:60px;
-      align-items:end;
-      margin-bottom:48px;
-    }
-    h2{
-      font-size:clamp(48px,7vw,105px);
-      line-height:.9;
-    }
-    .section-head p,.copy{
-      color:var(--muted);
-      line-height:1.75;
-      font-size:15px;
-      max-width:520px;
-    }
-
-    .photo-card{
-      position:relative;
-      min-height:72vh;
-      border-radius:28px;
-      overflow:hidden;
-      border:1px solid var(--line);
-      background:#0b0e12;
-    }
-    .photo-card img{
-      width:100%;height:100%;
-      position:absolute;inset:0;
-      object-fit:cover;
-      transition:transform .8s cubic-bezier(.2,.7,.2,1);
-    }
-    .photo-card:hover img{transform:scale(1.025)}
-    .photo-card::after{
-      content:"";position:absolute;inset:0;
-      background:linear-gradient(to top,rgba(4,6,9,.8),rgba(4,6,9,0) 55%);
-    }
-    .caption{
-      position:absolute;z-index:2;
-      left:28px;right:28px;bottom:26px;
-      display:flex;justify-content:space-between;gap:30px;align-items:flex-end;
-    }
-    .caption strong{font-family:Manrope;font-size:24px}
-    .caption span{color:#c8ced5;font-size:12px;max-width:390px;line-height:1.6}
-
-    .detail-grid{
-      display:grid;
-      grid-template-columns:1.05fr .95fr;
-      gap:24px;
-    }
-    .detail-grid .photo-card:first-child{min-height:660px}
-    .detail-grid .photo-card:last-child{min-height:660px}
-    .dial-img{object-position:center 48%}
-    .wrist-img{object-position:center}
-
-    .facts{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:1px;
-      background:var(--line);
-      border:1px solid var(--line);
-      border-radius:24px;
-      overflow:hidden;
-      margin-top:24px;
-    }
-    .fact{background:#090c11;padding:30px 26px;min-height:150px}
-    .fact b{display:block;font-family:Manrope;font-size:26px;margin-bottom:8px}
-    .fact span{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.15em}
-
-    .explore-wrap{
-      min-height:100svh;
-      padding:8vh 0 5vh;
-      background:
-        radial-gradient(circle at 50% 30%,rgba(47,91,158,.18),transparent 45%),
-        #030507;
-      border-top:1px solid var(--line);
-    }
-    .explore-head{
-      width:min(1220px,92vw);margin:0 auto 28px;
-      display:flex;justify-content:space-between;gap:40px;align-items:end;
-    }
-    .explore-head h2{font-size:clamp(44px,6vw,88px)}
-    .explore-help{color:var(--muted);font-size:12px;line-height:1.7;text-align:right;max-width:390px}
-
-    .viewer-shell{
-      width:min(1220px,92vw);
-      height:min(72vh,760px);
-      margin:0 auto;
-      position:relative;
-      border-radius:28px;
-      overflow:hidden;
-      border:1px solid var(--line);
-      background:
-        linear-gradient(135deg,#111821,#05070a 60%);
-      user-select:none;
-      touch-action:none;
-      cursor:grab;
-    }
-    .viewer-shell.dragging{cursor:grabbing}
-    .viewer-grid{
-      position:absolute;inset:0;
-      background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-      background-size:38px 38px;
-      mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent);
-      pointer-events:none;
-    }
-    .explorer-inner{
-      position:absolute;
-      left:50%;top:50%;
-      width:min(900px,82vw);
-      aspect-ratio:1.5/1;
-      transform:translate(-50%,-50%);
-      transform-origin:center;
-      will-change:transform;
-    }
-    .explorer-inner img{
-      width:100%;height:100%;object-fit:cover;
-      border-radius:18px;
-      display:block;
-      box-shadow:0 40px 100px rgba(0,0,0,.55);
-      pointer-events:none;
-    }
-
-    .hotspot{
-      position:absolute;
-      width:20px;height:20px;
-      border-radius:50%;
-      border:1px solid rgba(255,255,255,.9);
-      background:rgba(75,140,255,.78);
-      box-shadow:0 0 0 8px rgba(75,140,255,.12),0 0 28px rgba(75,140,255,.55);
-      transform:translate(-50%,-50%);
-      cursor:pointer;
-      z-index:4;
-    }
-    .hotspot::after{
-      content:"";position:absolute;inset:-12px;border-radius:50%;
-    }
-    .hotspot:hover,.hotspot.active{background:white;border-color:white}
-
-    .info-card{
-      position:absolute;
-      right:22px;bottom:22px;
-      z-index:10;
-      width:min(360px,calc(100% - 44px));
-      padding:20px 22px;
-      border-radius:18px;
-      background:rgba(7,10,14,.86);
-      border:1px solid rgba(255,255,255,.14);
-      backdrop-filter:blur(16px);
-      pointer-events:none;
-    }
-    .info-card small{color:var(--blue-soft);letter-spacing:.18em;text-transform:uppercase;font-size:9px}
-    .info-card h3{font-family:Manrope;font-size:20px;margin:7px 0 6px}
-    .info-card p{color:#aeb7c1;font-size:12px;line-height:1.65}
-
-    .tools{
-      position:absolute;
-      left:20px;bottom:20px;
-      z-index:12;
-      display:flex;gap:8px;
-    }
-    .tool{
-      min-width:42px;height:42px;padding:0 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(7,10,14,.76);
-      color:white;
-      cursor:pointer;
-      backdrop-filter:blur(12px);
-    }
-    .tool:hover{background:rgba(255,255,255,.12)}
-    .viewer-label{
-      position:absolute;left:22px;top:20px;z-index:8;
-      color:#c6cdd5;font-size:10px;text-transform:uppercase;letter-spacing:.18em;
-      background:rgba(5,7,10,.58);border:1px solid var(--line);padding:9px 12px;border-radius:999px;
-      backdrop-filter:blur(10px);
-    }
-
-    footer{
-      width:min(1220px,92vw);margin:0 auto;padding:34px 0 50px;
-      display:flex;justify-content:space-between;gap:30px;
-      color:#747f8b;font-size:10px;line-height:1.6;border-top:1px solid var(--line);
-    }
-
-    @media(max-width:900px){
-      .hero-content{padding-bottom:6vh}
-      .hero-copy,.section-head,.detail-grid,.explore-head{grid-template-columns:1fr;display:grid;gap:24px}
-      .hero-copy{align-items:start}
-      .facts{grid-template-columns:1fr 1fr}
-      .explore-help{text-align:left}
-      .viewer-shell{height:68vh}
-      .explorer-inner{width:92vw}
-      .info-card{right:14px;bottom:72px}
-      .tools{left:14px;bottom:14px}
-    }
-    @media(max-width:560px){
-      .nav{padding:16px 18px}
-      .nav small{display:none}
-      .hero-content,.section,.explore-head,.viewer-shell,footer{width:92vw}
-      .section{padding:90px 0}
-      .facts{grid-template-columns:1fr}
-      .detail-grid .photo-card:first-child,.detail-grid .photo-card:last-child{min-height:520px}
-      .caption{display:block}.caption span{display:block;margin-top:8px}
-      .viewer-shell{height:70vh}
-      .viewer-label{left:12px;top:12px}
-      .tool{height:38px;min-width:38px;padding:0 11px}
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#030508" />
+<title>G‑SPORT — Live 3D Watch</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+:root{--bg:#030508;--text:#f7f8fa;--muted:#8d98a6;--line:rgba(255,255,255,.11);--blue:#6aa2ff;--panel:rgba(8,11,16,.72)}
+*{box-sizing:border-box;margin:0;padding:0}html{background:var(--bg);scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;overflow-x:hidden}button{font:inherit}
+#stage{position:fixed;inset:0;width:100%;height:100%;z-index:1;display:block}
+.backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(circle at 50% 45%,rgba(61,102,181,.17),transparent 36%),linear-gradient(#05080d,#020305 70%)}
+.backdrop::before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(96,146,255,.11),transparent 22%);transition:.12s linear}
+.grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent)}
+.noise{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.85'/%3E%3C/svg%3E")}
+.nav{position:fixed;top:0;left:0;right:0;z-index:20;padding:22px 4vw;display:flex;justify-content:space-between;align-items:center;pointer-events:none;background:linear-gradient(to bottom,rgba(3,5,8,.75),transparent)}
+.brand{font-family:Manrope;font-weight:800;font-size:15px;letter-spacing:.18em}.live{font-size:10px;letter-spacing:.18em;color:#c7d0dc;display:flex;gap:8px;align-items:center}.dot{width:7px;height:7px;border-radius:50%;background:#78a9ff;box-shadow:0 0 18px #78a9ff;animation:pulse 1.8s infinite}@keyframes pulse{50%{opacity:.35;transform:scale(.7)}}
+.progress{position:fixed;left:0;top:0;height:2px;background:linear-gradient(90deg,#6aa2ff,#dce9ff);z-index:30;width:0}
+.overlay{position:relative;z-index:5;pointer-events:none}
+.scene{min-height:115vh;position:relative;display:flex;align-items:center;width:min(1260px,92vw);margin:auto}
+.copy{max-width:620px}.copy.right{margin-left:auto;text-align:right}.eyebrow{font-size:10px;letter-spacing:.27em;text-transform:uppercase;color:#96bfff;margin-bottom:18px}.scene h1,.scene h2{font-family:Manrope;font-weight:800;letter-spacing:-.06em;text-transform:uppercase}.scene h1{font-size:clamp(70px,12vw,178px);line-height:.78}.scene h2{font-size:clamp(54px,8vw,116px);line-height:.86}.scene p{margin-top:24px;color:#aab3bf;line-height:1.75;font-size:15px;max-width:500px}.right p{margin-left:auto}.hint{margin-top:30px;font-size:10px;letter-spacing:.18em;color:#717c89;text-transform:uppercase}.ghost{font-family:Manrope;font-weight:800;position:absolute;font-size:clamp(130px,24vw,360px);line-height:.7;color:rgba(255,255,255,.018);letter-spacing:-.08em;white-space:nowrap;z-index:-1}
+#hoverCard{position:fixed;right:28px;bottom:28px;z-index:24;width:min(360px,calc(100vw - 40px));padding:18px 20px;background:rgba(7,10,15,.78);border:1px solid rgba(255,255,255,.12);border-radius:18px;backdrop-filter:blur(18px);opacity:0;transform:translateY(12px);transition:.18s ease;pointer-events:none}#hoverCard.show{opacity:1;transform:translateY(0)}#hoverCard small{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#88b4ff}#hoverCard h3{font-family:Manrope;font-size:20px;margin:7px 0 6px}#hoverCard p{font-size:12px;line-height:1.6;color:#9fa9b5}
+.inspect{min-height:120vh}.inspect .copy{max-width:720px}.dock{position:fixed;left:50%;bottom:24px;transform:translate(-50%,18px);z-index:25;display:flex;gap:8px;align-items:center;padding:8px;background:rgba(6,9,13,.68);border:1px solid rgba(255,255,255,.12);border-radius:999px;backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:.25s ease}.dock.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}.dock button{border:0;color:white;background:rgba(255,255,255,.08);padding:10px 14px;border-radius:999px;cursor:pointer;font-size:11px;letter-spacing:.08em}.dock button:hover{background:rgba(255,255,255,.15)}.dock .label{padding:0 10px;color:#8994a1;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.loader{position:fixed;inset:0;z-index:100;background:#030508;display:grid;place-items:center;transition:.7s ease}.loader.done{opacity:0;visibility:hidden}.loadbox{text-align:center}.loadbox b{font-family:Manrope;font-size:28px;letter-spacing:.06em}.bar{width:min(360px,70vw);height:2px;background:#151b24;margin:18px auto 10px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:#7baeff}.loadpct{font-size:10px;color:#77818e;letter-spacing:.18em}
+.credit{position:fixed;left:24px;bottom:20px;z-index:12;font-size:9px;color:#55606d;max-width:280px;line-height:1.5;pointer-events:none}
+.cursor{position:fixed;width:34px;height:34px;border:1px solid rgba(255,255,255,.35);border-radius:50%;z-index:60;pointer-events:none;transform:translate(-50%,-50%);transition:width .16s,height .16s,border-color .16s;mix-blend-mode:difference}.cursor.drag{width:54px;height:54px;border-color:white}
+@media(max-width:900px){.scene{min-height:105vh;align-items:flex-end;padding-bottom:11vh}.copy,.copy.right{margin:0;text-align:left}.right p{margin-left:0}.scene h1{font-size:20vw}.scene h2{font-size:14vw}.ghost{display:none}.credit{display:none}.cursor{display:none}#hoverCard{right:14px;bottom:82px}.dock{bottom:16px;width:calc(100vw - 28px);justify-content:center}.dock .label{display:none}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/"}}</script>
 </head>
 <body>
-  <nav class="nav">
-    <div class="brand">G‑SPORT</div>
-    <small>REAL WATCH / INTERACTIVE EXPERIENCE</small>
-  </nav>
+<div class="backdrop"></div><div class="grid"></div><div class="noise"></div><div class="progress" id="progress"></div>
+<canvas id="stage"></canvas>
+<div class="loader" id="loader"><div class="loadbox"><b>G‑SPORT / LIVE 3D</b><div class="bar"><i id="loadbar"></i></div><div class="loadpct" id="loadpct">ЗАГРУЗКА 0%</div></div></div>
+<nav class="nav"><div class="brand">G‑SPORT</div><div class="live"><span class="dot"></span>LIVE 3D OBJECT</div></nav>
+<div class="cursor" id="cursor"></div>
+<div class="overlay">
+<section class="scene"><div class="ghost">TIME</div><div class="copy"><div class="eyebrow">01 / Live object</div><h1>Touch<br>time.</h1><p>Это не фотография и не нарисованная банка. На странице живёт настоящая 3D‑модель часов. Двигай мышкой — свет реагирует. Зажми и потяни — часы подчиняются тебе.</p><div class="hint">Листай вниз · зажми мышь и потяни</div></div></section>
+<section class="scene"><div class="ghost">DIAL</div><div class="copy right"><div class="eyebrow">02 / Dial</div><h2>Closer.<br>Much closer.</h2><p>Скролл управляет камерой: она подходит к циферблату, меняет угол и показывает стекло, стрелки и фактуру материалов без переключения картинок.</p></div></section>
+<section class="scene"><div class="ghost">STEEL</div><div class="copy"><div class="eyebrow">03 / Case</div><h2>Metal<br>in motion.</h2><p>Модель разворачивается боком. Свет движется вместе с курсором и подчёркивает полированный металл, корпус и кнопки.</p></div></section>
+<section class="scene"><div class="ghost">BACK</div><div class="copy right"><div class="eyebrow">04 / Back</div><h2>Every<br>angle.</h2><p>Камера облетает часы, а пользователь всё равно может добавить своё вращение мышью. Поэтому движение никогда не выглядит одинаково.</p></div></section>
+<section class="scene"><div class="ghost">DETAIL</div><div class="copy"><div class="eyebrow">05 / Interactive details</div><h2>Point.<br>Discover.</h2><p>Наводи курсор прямо на часы. Сайт определяет деталь под мышью и показывает пояснение справа снизу.</p></div></section>
+<section class="scene inspect"><div class="ghost">FREE</div><div class="copy right"><div class="eyebrow">06 / Free inspection</div><h2>Your<br>control.</h2><p>В финале режиссура заканчивается. Крути часы в любую сторону, приближай колесом, отпускай — инерция продолжит движение. Нажми AUTO, если хочешь автоматическое вращение.</p><div class="hint">Drag · wheel zoom · double click reset</div></div></section>
+</div>
+<div id="hoverCard"><small>DETAIL UNDER CURSOR</small><h3 id="partTitle">Корпус</h3><p id="partText">Наведи мышь на часы.</p></div>
+<div class="dock" id="dock"><span class="label">FREE INSPECTION</span><button id="minus">−</button><button id="plus">+</button><button id="auto">AUTO</button><button id="reset">RESET</button></div>
+<div class="credit">3D model: “Chronograph Watch”, Khronos glTF Sample Assets / Darmstadt Graphics Group GmbH, CC BY 4.0. Demo is not affiliated with the model trademarks.</div>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-  <header class="hero">
-    <div class="hero-image" aria-hidden="true"></div>
-    <div class="hero-content">
-      <div class="kicker">Real photography / no 3D model</div>
-      <h1>TIME<br>IN DETAIL.</h1>
-      <div class="hero-copy">
-        <p>Премиальная подача настоящих часов: крупные реальные фотографии, спокойные переходы и интерактивное изучение деталей без искусственной 3D‑модели.</p>
-        <div class="scroll-note">Листай вниз ↓</div>
-      </div>
-    </div>
-  </header>
+const canvas=document.getElementById('stage');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.22;
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x030508,.045);
+const camera=new THREE.PerspectiveCamera(32,innerWidth/innerHeight,.01,100);camera.position.set(0,0,6.2);
+const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(new RoomEnvironment(),.04).texture;
+const ambient=new THREE.AmbientLight(0xbfd3ff,1.2);scene.add(ambient);
+const key=new THREE.DirectionalLight(0xffffff,5.5);key.position.set(3,4,6);scene.add(key);
+const rim=new THREE.PointLight(0x4d83ff,32,12);rim.position.set(-4,1,4);scene.add(rim);
+const warm=new THREE.PointLight(0xffd7b2,10,10);warm.position.set(4,-2,2);scene.add(warm);
 
-  <main>
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <div class="kicker">01 / Dial</div>
-          <h2>Смотри<br>ближе.</h2>
-        </div>
-        <p>Вместо нарисованного объекта — настоящее макро‑фото. При прокрутке внимание переходит с общего силуэта на циферблат, стрелки и металлические детали.</p>
-      </div>
-      <div class="photo-card">
-        <img class="dial-img" src="https://images.unsplash.com/photo-1636639818651-d97365346a5c?auto=format&fit=crop&fm=jpg&q=88&w=3000" alt="Реальные часы с синим циферблатом" loading="lazy">
-        <div class="caption">
-          <strong>Blue dial / polished steel</strong>
-          <span>Глубокий синий циферблат и холодные металлические отражения дают ощущение дорогой предметной съёмки.</span>
-        </div>
-      </div>
-    </section>
+const watchRoot=new THREE.Group();const userRoot=new THREE.Group();const modelRoot=new THREE.Group();watchRoot.add(userRoot);userRoot.add(modelRoot);scene.add(watchRoot);
+let model=null,mixer=null,modelBounds=null,loaded=false;
+const loader=new GLTFLoader();
+const MODEL='https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/ChronographWatch/glTF-Binary/ChronographWatch.glb';
+loader.load(MODEL,g=>{model=g.scene;const box=new THREE.Box3().setFromObject(model);const size=box.getSize(new THREE.Vector3());const center=box.getCenter(new THREE.Vector3());const s=4.35/Math.max(size.x,size.y,size.z);model.scale.setScalar(s);model.position.set(-center.x*s,-center.y*s,-center.z*s);modelRoot.add(model);model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.material){o.material.envMapIntensity=1.35}}});modelBounds=new THREE.Box3().setFromObject(modelRoot);if(g.animations.length){mixer=new THREE.AnimationMixer(model);g.animations.forEach(c=>mixer.clipAction(c).play())}loaded=true;setTimeout(()=>document.getElementById('loader').classList.add('done'),250)},xhr=>{if(xhr.total){const p=Math.min(99,Math.round(xhr.loaded/xhr.total*100));document.getElementById('loadbar').style.width=p+'%';document.getElementById('loadpct').textContent='ЗАГРУЗКА '+p+'%'}},err=>{document.getElementById('loadpct').textContent='ОШИБКА ЗАГРУЗКИ МОДЕЛИ';console.error(err)});
 
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <div class="kicker">02 / Material</div>
-          <h2>Сталь.<br>Свет.</h2>
-        </div>
-        <p>Большие фотографии работают лучше искусственного 3D: видны реальные блики, микротекстура металла, стекло и глубина корпуса.</p>
-      </div>
-      <div class="detail-grid">
-        <div class="photo-card">
-          <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&fm=jpg&q=90&w=2400" alt="Стальные хронографические часы" loading="lazy">
-          <div class="caption"><strong>Case</strong><span>Полированный корпус, без искусственной геометрии.</span></div>
-        </div>
-        <div class="photo-card">
-          <img class="wrist-img" src="https://images.unsplash.com/photo-1516461240763-822a87484851?auto=format&fit=crop&fm=jpg&q=88&w=2400" alt="Часы на запястье" loading="lazy">
-          <div class="caption"><strong>On wrist</strong><span>Реальный масштаб и то, как часы выглядят в повседневном использовании.</span></div>
-        </div>
-      </div>
-      <div class="facts">
-        <div class="fact"><b>REAL</b><span>Photography</span></div>
-        <div class="fact"><b>HD</b><span>Large images</span></div>
-        <div class="fact"><b>DRAG</b><span>Move & rotate</span></div>
-        <div class="fact"><b>ZOOM</b><span>Mouse wheel</span></div>
-      </div>
-    </section>
+const pts=[];for(let i=0;i<180;i++)pts.push((Math.random()-.5)*16,(Math.random()-.5)*10,(Math.random()-.5)*10);const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));const particles=new THREE.Points(geo,new THREE.PointsMaterial({color:0x8cb5ff,size:.012,transparent:true,opacity:.38}));scene.add(particles);
 
-    <section class="explore-wrap" id="explore">
-      <div class="explore-head">
-        <div>
-          <div class="kicker">03 / Explore</div>
-          <h2>Трогай<br>сам.</h2>
-        </div>
-        <div class="explore-help">Зажми фотографию мышкой и двигай её. Колёсико — приближение. Наводи на светящиеся точки — справа снизу появится объяснение детали.</div>
-      </div>
+const states=[
+{p:0,cam:[0,0,6.3],pos:[.85,.05,0],rot:[-.06,.28,.02],scale:1},
+{p:.2,cam:[0,0,5.35],pos:[-.72,.02,0],rot:[.12,-.5,0],scale:1.18},
+{p:.4,cam:[0,0,5.6],pos:[.7,0,0],rot:[.16,1.18,.05],scale:1.08},
+{p:.6,cam:[0,0,5.0],pos:[-.58,-.04,0],rot:[.65,2.55,-.08],scale:1.2},
+{p:.8,cam:[0,0,5.35],pos:[.5,0,0],rot:[.08,3.3,.02],scale:1.12},
+{p:1,cam:[0,0,5.8],pos:[0,0,0],rot:[0,.05,0],scale:1.02}
+];
+const lerp=(a,b,t)=>a+(b-a)*t;function sample(p){let a=states[0],b=states.at(-1);for(let i=0;i<states.length-1;i++){if(p>=states[i].p&&p<=states[i+1].p){a=states[i];b=states[i+1];break}}const t=(p-a.p)/(b.p-a.p||1);return{cam:a.cam.map((v,i)=>lerp(v,b.cam[i],t)),pos:a.pos.map((v,i)=>lerp(v,b.pos[i],t)),rot:a.rot.map((v,i)=>lerp(v,b.rot[i],t)),scale:lerp(a.scale,b.scale,t)}}
 
-      <div class="viewer-shell" id="viewer">
-        <div class="viewer-grid"></div>
-        <div class="viewer-label">Interactive real photo</div>
+let scrollP=0,targetUserX=0,targetUserY=0,userX=0,userY=0,velX=0,velY=0,drag=false,lastX=0,lastY=0,zoom=0,autoSpin=false,inspect=false;
+const mouse=new THREE.Vector2(),raycaster=new THREE.Raycaster();const hoverCard=document.getElementById('hoverCard'),partTitle=document.getElementById('partTitle'),partText=document.getElementById('partText'),dock=document.getElementById('dock'),cursor=document.getElementById('cursor');
+function updateScroll(){const max=document.documentElement.scrollHeight-innerHeight;scrollP=max>0?scrollY/max:0;document.getElementById('progress').style.width=(scrollP*100)+'%';inspect=scrollP>.84;dock.classList.toggle('show',inspect)}updateScroll();addEventListener('scroll',updateScroll,{passive:true});
 
-        <div class="explorer-inner" id="explorerInner">
-          <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&fm=jpg&q=92&w=3000" alt="Интерактивное реальное фото часов" draggable="false">
+function classify(obj){const n=((obj?.name||'')+' '+(obj?.parent?.name||'')).toLowerCase();if(/strap|band|bracelet|buckle/.test(n))return['Ремешок / браслет','Эта часть отвечает за посадку часов на запястье. Посмотри на геометрию соединений и изгиб при вращении.'];if(/dial|face|chrono|subdial|hand|index|marker/.test(n))return['Циферблат','Основная читаемая зона часов: стрелки, индексы и дополнительные шкалы находятся на разных уровнях глубины.'];if(/glass|crystal/.test(n))return['Стекло','Прозрачная поверхность над циферблатом. При движении курсора меняется отражение окружения.'];if(/crown|button|push/.test(n))return['Заводная головка / кнопка','Боковой орган управления. Разверни часы боком, чтобы рассмотреть посадку и форму детали.'];if(/bezel/.test(n))return['Безель','Кольцо вокруг циферблата формирует профиль корпуса и ловит самые яркие металлические блики.'];if(/back|caseback/.test(n))return['Задняя крышка','Обратная сторона корпуса. Поверни модель полностью, чтобы рассмотреть конструкцию сзади.'];return['Корпус и отделка','Наведи курсор на соседние элементы или поверни часы: интерактив работает по реальной геометрии модели.']}
+function doRaycast(e){if(!loaded||drag)return;const r=canvas.getBoundingClientRect();mouse.x=((e.clientX-r.left)/r.width)*2-1;mouse.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(mouse,camera);const hits=raycaster.intersectObject(modelRoot,true);if(hits.length){const [t,d]=classify(hits[0].object);partTitle.textContent=t;partText.textContent=d;hoverCard.classList.add('show')}else hoverCard.classList.remove('show')}
 
-          <button class="hotspot active" style="left:67%;top:55%" data-title="Циферблат" data-text="Главная зона часов: крупные индексы, стрелки и хронографические счётчики. Наведение не открывает отдельное окно — объяснение всегда остаётся аккуратно справа снизу."></button>
-          <button class="hotspot" style="left:72%;top:28%" data-title="Кнопки хронографа" data-text="Боковые кнопки управляют функциями хронографа. На реальном фото хорошо видно их форму, обработку металла и посадку относительно корпуса."></button>
-          <button class="hotspot" style="left:58%;top:59%" data-title="Безель" data-text="Внешнее кольцо вокруг циферблата визуально отделяет стекло от корпуса и подчёркивает спортивный характер часов."></button>
-          <button class="hotspot" style="left:28%;top:61%" data-title="Стальной браслет" data-text="Металлические звенья отражают свет по‑разному под каждым углом. Именно такие детали особенно выигрывают от настоящей фотографии высокого разрешения."></button>
-        </div>
+addEventListener('pointermove',e=>{document.documentElement.style.setProperty('--mx',(e.clientX/innerWidth*100)+'%');document.documentElement.style.setProperty('--my',(e.clientY/innerHeight*100)+'%');cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';mouse.x=e.clientX/innerWidth*2-1;mouse.y=-(e.clientY/innerHeight*2-1);key.position.x=3+mouse.x*2.8;key.position.y=4+mouse.y*1.8;rim.position.x=-4-mouse.x*2;if(drag){const dx=e.clientX-lastX,dy=e.clientY-lastY;targetUserY+=dx*.008;targetUserX+=dy*.006;targetUserX=Math.max(-1.2,Math.min(1.2,targetUserX));velY=dx*.0027;velX=dy*.0022;lastX=e.clientX;lastY=e.clientY}else doRaycast(e)});
+canvas.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'&&!inspect)return;drag=true;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture?.(e.pointerId);cursor.classList.add('drag');hoverCard.classList.remove('show')});addEventListener('pointerup',()=>{drag=false;cursor.classList.remove('drag')});canvas.addEventListener('dblclick',resetView);canvas.addEventListener('mouseleave',()=>hoverCard.classList.remove('show'));
+canvas.addEventListener('wheel',e=>{if(!inspect)return;e.preventDefault();zoom+=e.deltaY*.0022;zoom=Math.max(-1.25,Math.min(1.5,zoom))},{passive:false});
+function resetView(){targetUserX=targetUserY=userX=userY=velX=velY=zoom=0;autoSpin=false;document.getElementById('auto').textContent='AUTO'}
+document.getElementById('reset').onclick=resetView;document.getElementById('plus').onclick=()=>zoom=Math.max(-1.25,zoom-.18);document.getElementById('minus').onclick=()=>zoom=Math.min(1.5,zoom+.18);document.getElementById('auto').onclick=e=>{autoSpin=!autoSpin;e.currentTarget.textContent=autoSpin?'AUTO ON':'AUTO'};
 
-        <div class="tools">
-          <button class="tool" id="zoomOut" aria-label="Уменьшить">−</button>
-          <button class="tool" id="zoomIn" aria-label="Увеличить">+</button>
-          <button class="tool" id="rotateLeft" aria-label="Повернуть влево">↶</button>
-          <button class="tool" id="rotateRight" aria-label="Повернуть вправо">↷</button>
-          <button class="tool" id="resetView">Сброс</button>
-        </div>
+const clock=new THREE.Clock();function animate(){requestAnimationFrame(animate);const dt=Math.min(.033,clock.getDelta());if(mixer)mixer.update(dt);if(!drag){targetUserY+=velY;targetUserX+=velX;velY*=.94;velX*=.94}if(autoSpin&&inspect)targetUserY+=dt*.55;userX+=(targetUserX-userX)*.09;userY+=(targetUserY-userY)*.09;const s=sample(scrollP);watchRoot.position.x+=(s.pos[0]-watchRoot.position.x)*.06;watchRoot.position.y+=(s.pos[1]-watchRoot.position.y)*.06;watchRoot.position.z+=(s.pos[2]-watchRoot.position.z)*.06;watchRoot.rotation.x+=(s.rot[0]+userX-watchRoot.rotation.x)*.07;watchRoot.rotation.y+=(s.rot[1]+userY-watchRoot.rotation.y)*.07;watchRoot.rotation.z+=(s.rot[2]-watchRoot.rotation.z)*.07;const targetScale=s.scale*(1+(inspect?-.08*zoom:0));watchRoot.scale.x+=(targetScale-watchRoot.scale.x)*.07;watchRoot.scale.y=watchRoot.scale.z=watchRoot.scale.x;const mz=inspect?zoom:0;camera.position.x+=(s.cam[0]+mouse.x*.08-camera.position.x)*.055;camera.position.y+=(s.cam[1]+mouse.y*.055-camera.position.y)*.055;camera.position.z+=(s.cam[2]+mz-camera.position.z)*.055;camera.lookAt(0,0,0);particles.rotation.y+=dt*.025;particles.rotation.x=Math.sin(performance.now()*.0001)*.08;renderer.render(scene,camera)}animate();
 
-        <aside class="info-card" id="infoCard">
-          <small>Наведи на точку</small>
-          <h3 id="infoTitle">Циферблат</h3>
-          <p id="infoText">Главная зона часов: крупные индексы, стрелки и хронографические счётчики. Наведение не открывает отдельное окно — объяснение всегда остаётся аккуратно справа снизу.</p>
-        </aside>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <span>Concept website / G‑SPORT</span>
-    <span>Photography sourced from Unsplash. Interactive viewer uses real photography, not a 3D model.</span>
-  </footer>
-
-  <script>
-    const viewer = document.getElementById('viewer');
-    const inner = document.getElementById('explorerInner');
-    const title = document.getElementById('infoTitle');
-    const text = document.getElementById('infoText');
-    const hotspots = [...document.querySelectorAll('.hotspot')];
-
-    let x = 0, y = 0, scale = 1, rotation = 0;
-    let dragging = false, startX = 0, startY = 0, baseX = 0, baseY = 0;
-
-    function clamp(v,min,max){ return Math.min(max,Math.max(min,v)); }
-    function render(){
-      inner.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${scale}) rotate(${rotation}deg)`;
-    }
-
-    viewer.addEventListener('pointerdown', e => {
-      if(e.target.closest('.tool') || e.target.closest('.hotspot')) return;
-      dragging = true;
-      viewer.classList.add('dragging');
-      viewer.setPointerCapture(e.pointerId);
-      startX = e.clientX; startY = e.clientY;
-      baseX = x; baseY = y;
-    });
-
-    viewer.addEventListener('pointermove', e => {
-      if(!dragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      x = baseX + dx * .45;
-      y = baseY + dy * .45;
-      rotation = clamp(rotation + dx * .012, -18, 18);
-      render();
-    });
-
-    function stopDrag(){ dragging = false; viewer.classList.remove('dragging'); }
-    viewer.addEventListener('pointerup', stopDrag);
-    viewer.addEventListener('pointercancel', stopDrag);
-
-    viewer.addEventListener('wheel', e => {
-      e.preventDefault();
-      scale = clamp(scale + (e.deltaY < 0 ? .09 : -.09), .75, 2.25);
-      render();
-    }, {passive:false});
-
-    document.getElementById('zoomIn').onclick = () => { scale = clamp(scale + .15,.75,2.25); render(); };
-    document.getElementById('zoomOut').onclick = () => { scale = clamp(scale - .15,.75,2.25); render(); };
-    document.getElementById('rotateLeft').onclick = () => { rotation -= 10; render(); };
-    document.getElementById('rotateRight').onclick = () => { rotation += 10; render(); };
-    document.getElementById('resetView').onclick = () => { x=0;y=0;scale=1;rotation=0;render(); };
-
-    hotspots.forEach(h => {
-      const show = () => {
-        hotspots.forEach(p => p.classList.remove('active'));
-        h.classList.add('active');
-        title.textContent = h.dataset.title;
-        text.textContent = h.dataset.text;
-      };
-      h.addEventListener('mouseenter', show);
-      h.addEventListener('focus', show);
-      h.addEventListener('click', e => { e.stopPropagation(); show(); });
-    });
-
-    window.addEventListener('scroll', () => {
-      const hero = document.querySelector('.hero-image');
-      if(window.scrollY < innerHeight * 1.3){
-        hero.style.transform = `scale(${1.04 + window.scrollY/innerHeight*.035}) translateY(${window.scrollY*.035}px)`;
-      }
-    }, {passive:true});
-  </script>
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2))});
+</script>
 </body>
 </html>
