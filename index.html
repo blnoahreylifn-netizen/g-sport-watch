@@ -1,910 +1,516 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G-Sport Watch — Interactive 3D</title>
-
+  <meta name="theme-color" content="#05070a" />
+  <title>G‑SPORT — Real Watch Experience</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+
+    :root{
+      --bg:#05070a;
+      --panel:#0c1016;
+      --text:#f6f7f8;
+      --muted:#9aa3ad;
+      --line:rgba(255,255,255,.12);
+      --blue:#4b8cff;
+      --blue-soft:#a9c6ff;
     }
 
-    html {
-      scroll-behavior: smooth;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;background:var(--bg)}
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:Inter,Arial,sans-serif;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+
+    .nav{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:50;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:20px 4vw;
+      background:linear-gradient(to bottom,rgba(5,7,10,.82),rgba(5,7,10,0));
+      pointer-events:none;
+    }
+    .brand{
+      font-family:Manrope,sans-serif;
+      font-weight:800;
+      letter-spacing:.18em;
+      font-size:15px;
+    }
+    .nav small{color:#c9d0d8;letter-spacing:.14em;font-size:10px}
+
+    .hero{
+      min-height:100svh;
+      position:relative;
+      display:flex;
+      align-items:flex-end;
+      overflow:hidden;
+      background:#0a0b0d;
+    }
+    .hero-image{
+      position:absolute;
+      inset:0;
+      background-image:url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&fm=jpg&q=88&w=3000');
+      background-size:cover;
+      background-position:center;
+      transform:scale(1.04);
+      animation:heroFloat 12s ease-in-out infinite alternate;
+    }
+    @keyframes heroFloat{
+      from{transform:scale(1.04) translate3d(0,0,0)}
+      to{transform:scale(1.1) translate3d(-1.5%,1%,0)}
+    }
+    .hero::after{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        linear-gradient(90deg,rgba(3,5,8,.88) 0%,rgba(3,5,8,.45) 42%,rgba(3,5,8,.08) 70%),
+        linear-gradient(0deg,rgba(3,5,8,.92) 0%,rgba(3,5,8,0) 58%);
+    }
+    .hero-content{
+      position:relative;
+      z-index:2;
+      width:min(1220px,92vw);
+      margin:0 auto;
+      padding:0 0 8vh;
+    }
+    .kicker{
+      color:var(--blue-soft);
+      text-transform:uppercase;
+      letter-spacing:.28em;
+      font-size:11px;
+      font-weight:600;
+      margin-bottom:18px;
+    }
+    h1,h2{
+      font-family:Manrope,sans-serif;
+      letter-spacing:-.055em;
+    }
+    h1{
+      font-size:clamp(64px,11vw,170px);
+      line-height:.82;
+      max-width:1000px;
+    }
+    .hero-copy{
+      display:flex;
+      gap:48px;
+      align-items:flex-end;
+      justify-content:space-between;
+      margin-top:34px;
+      border-top:1px solid var(--line);
+      padding-top:22px;
+    }
+    .hero-copy p{
+      max-width:520px;
+      color:#d4d9df;
+      line-height:1.65;
+      font-size:15px;
+    }
+    .scroll-note{
+      color:var(--muted);
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      white-space:nowrap;
     }
 
-    body {
-      background: #050505;
-      color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      overflow-x: hidden;
+    .section{
+      width:min(1220px,92vw);
+      margin:0 auto;
+      padding:130px 0;
+    }
+    .section-head{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:60px;
+      align-items:end;
+      margin-bottom:48px;
+    }
+    h2{
+      font-size:clamp(48px,7vw,105px);
+      line-height:.9;
+    }
+    .section-head p,.copy{
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+      max-width:520px;
     }
 
-    canvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
+    .photo-card{
+      position:relative;
+      min-height:72vh;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:#0b0e12;
+    }
+    .photo-card img{
+      width:100%;height:100%;
+      position:absolute;inset:0;
+      object-fit:cover;
+      transition:transform .8s cubic-bezier(.2,.7,.2,1);
+    }
+    .photo-card:hover img{transform:scale(1.025)}
+    .photo-card::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(to top,rgba(4,6,9,.8),rgba(4,6,9,0) 55%);
+    }
+    .caption{
+      position:absolute;z-index:2;
+      left:28px;right:28px;bottom:26px;
+      display:flex;justify-content:space-between;gap:30px;align-items:flex-end;
+    }
+    .caption strong{font-family:Manrope;font-size:24px}
+    .caption span{color:#c8ced5;font-size:12px;max-width:390px;line-height:1.6}
+
+    .detail-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:24px;
+    }
+    .detail-grid .photo-card:first-child{min-height:660px}
+    .detail-grid .photo-card:last-child{min-height:660px}
+    .dial-img{object-position:center 48%}
+    .wrist-img{object-position:center}
+
+    .facts{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:1px;
+      background:var(--line);
+      border:1px solid var(--line);
+      border-radius:24px;
+      overflow:hidden;
+      margin-top:24px;
+    }
+    .fact{background:#090c11;padding:30px 26px;min-height:150px}
+    .fact b{display:block;font-family:Manrope;font-size:26px;margin-bottom:8px}
+    .fact span{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.15em}
+
+    .explore-wrap{
+      min-height:100svh;
+      padding:8vh 0 5vh;
+      background:
+        radial-gradient(circle at 50% 30%,rgba(47,91,158,.18),transparent 45%),
+        #030507;
+      border-top:1px solid var(--line);
+    }
+    .explore-head{
+      width:min(1220px,92vw);margin:0 auto 28px;
+      display:flex;justify-content:space-between;gap:40px;align-items:end;
+    }
+    .explore-head h2{font-size:clamp(44px,6vw,88px)}
+    .explore-help{color:var(--muted);font-size:12px;line-height:1.7;text-align:right;max-width:390px}
+
+    .viewer-shell{
+      width:min(1220px,92vw);
+      height:min(72vh,760px);
+      margin:0 auto;
+      position:relative;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:
+        linear-gradient(135deg,#111821,#05070a 60%);
+      user-select:none;
+      touch-action:none;
+      cursor:grab;
+    }
+    .viewer-shell.dragging{cursor:grabbing}
+    .viewer-grid{
+      position:absolute;inset:0;
+      background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+      background-size:38px 38px;
+      mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent);
+      pointer-events:none;
+    }
+    .explorer-inner{
+      position:absolute;
+      left:50%;top:50%;
+      width:min(900px,82vw);
+      aspect-ratio:1.5/1;
+      transform:translate(-50%,-50%);
+      transform-origin:center;
+      will-change:transform;
+    }
+    .explorer-inner img{
+      width:100%;height:100%;object-fit:cover;
+      border-radius:18px;
+      display:block;
+      box-shadow:0 40px 100px rgba(0,0,0,.55);
+      pointer-events:none;
     }
 
-    .overlay {
-      position: relative;
-      z-index: 2;
-      pointer-events: none;
+    .hotspot{
+      position:absolute;
+      width:20px;height:20px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.9);
+      background:rgba(75,140,255,.78);
+      box-shadow:0 0 0 8px rgba(75,140,255,.12),0 0 28px rgba(75,140,255,.55);
+      transform:translate(-50%,-50%);
+      cursor:pointer;
+      z-index:4;
+    }
+    .hotspot::after{
+      content:"";position:absolute;inset:-12px;border-radius:50%;
+    }
+    .hotspot:hover,.hotspot.active{background:white;border-color:white}
+
+    .info-card{
+      position:absolute;
+      right:22px;bottom:22px;
+      z-index:10;
+      width:min(360px,calc(100% - 44px));
+      padding:20px 22px;
+      border-radius:18px;
+      background:rgba(7,10,14,.86);
+      border:1px solid rgba(255,255,255,.14);
+      backdrop-filter:blur(16px);
+      pointer-events:none;
+    }
+    .info-card small{color:var(--blue-soft);letter-spacing:.18em;text-transform:uppercase;font-size:9px}
+    .info-card h3{font-family:Manrope;font-size:20px;margin:7px 0 6px}
+    .info-card p{color:#aeb7c1;font-size:12px;line-height:1.65}
+
+    .tools{
+      position:absolute;
+      left:20px;bottom:20px;
+      z-index:12;
+      display:flex;gap:8px;
+    }
+    .tool{
+      min-width:42px;height:42px;padding:0 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(7,10,14,.76);
+      color:white;
+      cursor:pointer;
+      backdrop-filter:blur(12px);
+    }
+    .tool:hover{background:rgba(255,255,255,.12)}
+    .viewer-label{
+      position:absolute;left:22px;top:20px;z-index:8;
+      color:#c6cdd5;font-size:10px;text-transform:uppercase;letter-spacing:.18em;
+      background:rgba(5,7,10,.58);border:1px solid var(--line);padding:9px 12px;border-radius:999px;
+      backdrop-filter:blur(10px);
     }
 
-    .topbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 22px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10;
-      pointer-events: none;
-      mix-blend-mode: difference;
+    footer{
+      width:min(1220px,92vw);margin:0 auto;padding:34px 0 50px;
+      display:flex;justify-content:space-between;gap:30px;
+      color:#747f8b;font-size:10px;line-height:1.6;border-top:1px solid var(--line);
     }
 
-    .logo {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: 0.18em;
+    @media(max-width:900px){
+      .hero-content{padding-bottom:6vh}
+      .hero-copy,.section-head,.detail-grid,.explore-head{grid-template-columns:1fr;display:grid;gap:24px}
+      .hero-copy{align-items:start}
+      .facts{grid-template-columns:1fr 1fr}
+      .explore-help{text-align:left}
+      .viewer-shell{height:68vh}
+      .explorer-inner{width:92vw}
+      .info-card{right:14px;bottom:72px}
+      .tools{left:14px;bottom:14px}
     }
-
-    .topbar span {
-      font-size: 12px;
-      letter-spacing: 0.16em;
-      opacity: 0.65;
-    }
-
-    section {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 10vw;
-      position: relative;
-    }
-
-    .content {
-      max-width: 560px;
-    }
-
-    .right {
-      margin-left: auto;
-      text-align: right;
-    }
-
-    .eyebrow {
-      font-size: 12px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      opacity: 0.55;
-      margin-bottom: 16px;
-    }
-
-    h1 {
-      font-size: clamp(64px, 11vw, 180px);
-      line-height: 0.82;
-      letter-spacing: -0.06em;
-      text-transform: uppercase;
-    }
-
-    h2 {
-      font-size: clamp(50px, 8vw, 120px);
-      line-height: 0.9;
-      letter-spacing: -0.05em;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-    }
-
-    p {
-      max-width: 420px;
-      font-size: 18px;
-      line-height: 1.6;
-      opacity: 0.7;
-    }
-
-    .right p {
-      margin-left: auto;
-    }
-
-    .hero {
-      justify-content: flex-start;
-    }
-
-    .hero .content {
-      max-width: 900px;
-    }
-
-    .hero p {
-      margin-top: 24px;
-    }
-
-    .scroll {
-      position: absolute;
-      bottom: 40px;
-      left: 10vw;
-      font-size: 11px;
-      letter-spacing: 0.25em;
-      opacity: 0.4;
-    }
-
-    .config-section {
-      pointer-events: auto;
-    }
-
-    .config-panel {
-      background: rgba(15, 15, 15, 0.55);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 24px;
-      padding: 28px;
-      width: min(380px, 90vw);
-    }
-
-    .config-panel h3 {
-      font-size: 26px;
-      margin-bottom: 8px;
-    }
-
-    .config-panel p {
-      font-size: 14px;
-      margin-bottom: 24px;
-    }
-
-    .option-title {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      opacity: 0.5;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-    }
-
-    .colors {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .color {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.2);
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .color:hover {
-      transform: scale(1.12);
-      border-color: white;
-    }
-
-    .blue { background: #0b4d78; }
-    .green { background: #164d38; }
-    .black { background: #111; }
-    .silver { background: #b8bec7; }
-
-    .reset {
-      width: 100%;
-      padding: 14px 18px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      color: white;
-      background: rgba(255,255,255,0.07);
-      cursor: pointer;
-      font-size: 13px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .specs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: rgba(255,255,255,0.12);
-      max-width: 620px;
-      margin-top: 40px;
-    }
-
-    .spec {
-      background: #070707;
-      padding: 24px;
-    }
-
-    .spec strong {
-      display: block;
-      font-size: 24px;
-      margin-bottom: 5px;
-    }
-
-    .spec span {
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      opacity: 0.45;
-      text-transform: uppercase;
-    }
-
-    @media (max-width: 800px) {
-      section {
-        padding: 26px;
-      }
-
-      .topbar {
-        padding: 18px 20px;
-      }
-
-      h1 {
-        font-size: 20vw;
-      }
-
-      h2 {
-        font-size: 15vw;
-      }
-
-      .content {
-        margin-top: 40vh;
-      }
-
-      .right {
-        text-align: left;
-        margin-left: 0;
-      }
-
-      .right p {
-        margin-left: 0;
-      }
-
-      .specs {
-        grid-template-columns: 1fr;
-      }
+    @media(max-width:560px){
+      .nav{padding:16px 18px}
+      .nav small{display:none}
+      .hero-content,.section,.explore-head,.viewer-shell,footer{width:92vw}
+      .section{padding:90px 0}
+      .facts{grid-template-columns:1fr}
+      .detail-grid .photo-card:first-child,.detail-grid .photo-card:last-child{min-height:520px}
+      .caption{display:block}.caption span{display:block;margin-top:8px}
+      .viewer-shell{height:70vh}
+      .viewer-label{left:12px;top:12px}
+      .tool{height:38px;min-width:38px;padding:0 11px}
     }
   </style>
-
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/"
-    }
-  }
-  </script>
 </head>
-
 <body>
+  <nav class="nav">
+    <div class="brand">G‑SPORT</div>
+    <small>REAL WATCH / INTERACTIVE EXPERIENCE</small>
+  </nav>
 
-  <div class="topbar">
-    <div class="logo">G-SPORT</div>
-    <span>INTERACTIVE TIMEPIECE</span>
-  </div>
-
-  <div class="overlay">
-
-    <section class="hero">
-      <div class="content">
-        <div class="eyebrow">Precision / Steel / Motion</div>
-        <h1>OWN<br>THE TIME</h1>
-        <p>
-          An interactive mechanical object built to be explored.
-          Drag the watch with your mouse. Scroll to discover every detail.
-        </p>
+  <header class="hero">
+    <div class="hero-image" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="kicker">Real photography / no 3D model</div>
+      <h1>TIME<br>IN DETAIL.</h1>
+      <div class="hero-copy">
+        <p>Премиальная подача настоящих часов: крупные реальные фотографии, спокойные переходы и интерактивное изучение деталей без искусственной 3D‑модели.</p>
+        <div class="scroll-note">Листай вниз ↓</div>
       </div>
+    </div>
+  </header>
 
-      <div class="scroll">SCROLL TO EXPLORE ↓</div>
-    </section>
-
-    <section>
-      <div class="content">
-        <div class="eyebrow">01 / Dial</div>
-        <h2>Deep<br>Blue</h2>
-        <p>
-          A layered blue dial with metallic markers and three precision subdials.
-          Light moves across the surface as the watch rotates.
-        </p>
+  <main>
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="kicker">01 / Dial</div>
+          <h2>Смотри<br>ближе.</h2>
+        </div>
+        <p>Вместо нарисованного объекта — настоящее макро‑фото. При прокрутке внимание переходит с общего силуэта на циферблат, стрелки и металлические детали.</p>
       </div>
-    </section>
-
-    <section>
-      <div class="content right">
-        <div class="eyebrow">02 / Case</div>
-        <h2>Built<br>In Steel</h2>
-        <p>
-          Dark brushed metal surrounds the dial while polished details catch the light.
-        </p>
-      </div>
-    </section>
-
-    <section>
-      <div class="content">
-        <div class="eyebrow">03 / Bracelet</div>
-        <h2>Mesh<br>Motion</h2>
-        <p>
-          Flexible steel mesh wraps around the wrist and keeps the profile clean and modern.
-        </p>
-      </div>
-    </section>
-
-    <section class="config-section">
-      <div class="content right">
-        <div class="config-panel">
-          <div class="eyebrow">04 / Configure</div>
-
-          <h3>Make it yours.</h3>
-
-          <p>
-            Change the dial and case while you rotate the watch yourself.
-          </p>
-
-          <div class="option-title">Dial color</div>
-
-          <div class="colors">
-            <button class="color blue" data-dial="#0b4d78"></button>
-            <button class="color green" data-dial="#164d38"></button>
-            <button class="color black" data-dial="#090909"></button>
-            <button class="color silver" data-dial="#9da6b3"></button>
-          </div>
-
-          <div class="option-title">Case color</div>
-
-          <div class="colors">
-            <button class="color black" data-case="#161616"></button>
-            <button class="color silver" data-case="#9da3aa"></button>
-          </div>
-
-          <button class="reset" id="reset">Reset view</button>
+      <div class="photo-card">
+        <img class="dial-img" src="https://images.unsplash.com/photo-1636639818651-d97365346a5c?auto=format&fit=crop&fm=jpg&q=88&w=3000" alt="Реальные часы с синим циферблатом" loading="lazy">
+        <div class="caption">
+          <strong>Blue dial / polished steel</strong>
+          <span>Глубокий синий циферблат и холодные металлические отражения дают ощущение дорогой предметной съёмки.</span>
         </div>
       </div>
     </section>
 
-    <section>
-      <div class="content">
-        <div class="eyebrow">05 / Specifications</div>
-        <h2>Designed<br>To Last</h2>
-
-        <div class="specs">
-          <div class="spec">
-            <strong>44 MM</strong>
-            <span>Case size</span>
-          </div>
-
-          <div class="spec">
-            <strong>316L</strong>
-            <span>Steel</span>
-          </div>
-
-          <div class="spec">
-            <strong>10 ATM</strong>
-            <span>Water resistance</span>
-          </div>
-
-          <div class="spec">
-            <strong>Quartz</strong>
-            <span>Movement</span>
-          </div>
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="kicker">02 / Material</div>
+          <h2>Сталь.<br>Свет.</h2>
         </div>
+        <p>Большие фотографии работают лучше искусственного 3D: видны реальные блики, микротекстура металла, стекло и глубина корпуса.</p>
+      </div>
+      <div class="detail-grid">
+        <div class="photo-card">
+          <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&fm=jpg&q=90&w=2400" alt="Стальные хронографические часы" loading="lazy">
+          <div class="caption"><strong>Case</strong><span>Полированный корпус, без искусственной геометрии.</span></div>
+        </div>
+        <div class="photo-card">
+          <img class="wrist-img" src="https://images.unsplash.com/photo-1516461240763-822a87484851?auto=format&fit=crop&fm=jpg&q=88&w=2400" alt="Часы на запястье" loading="lazy">
+          <div class="caption"><strong>On wrist</strong><span>Реальный масштаб и то, как часы выглядят в повседневном использовании.</span></div>
+        </div>
+      </div>
+      <div class="facts">
+        <div class="fact"><b>REAL</b><span>Photography</span></div>
+        <div class="fact"><b>HD</b><span>Large images</span></div>
+        <div class="fact"><b>DRAG</b><span>Move & rotate</span></div>
+        <div class="fact"><b>ZOOM</b><span>Mouse wheel</span></div>
       </div>
     </section>
 
-  </div>
+    <section class="explore-wrap" id="explore">
+      <div class="explore-head">
+        <div>
+          <div class="kicker">03 / Explore</div>
+          <h2>Трогай<br>сам.</h2>
+        </div>
+        <div class="explore-help">Зажми фотографию мышкой и двигай её. Колёсико — приближение. Наводи на светящиеся точки — справа снизу появится объяснение детали.</div>
+      </div>
 
-  <script type="module">
+      <div class="viewer-shell" id="viewer">
+        <div class="viewer-grid"></div>
+        <div class="viewer-label">Interactive real photo</div>
 
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        <div class="explorer-inner" id="explorerInner">
+          <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&fm=jpg&q=92&w=3000" alt="Интерактивное реальное фото часов" draggable="false">
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x050505);
+          <button class="hotspot active" style="left:67%;top:55%" data-title="Циферблат" data-text="Главная зона часов: крупные индексы, стрелки и хронографические счётчики. Наведение не открывает отдельное окно — объяснение всегда остаётся аккуратно справа снизу."></button>
+          <button class="hotspot" style="left:72%;top:28%" data-title="Кнопки хронографа" data-text="Боковые кнопки управляют функциями хронографа. На реальном фото хорошо видно их форму, обработку металла и посадку относительно корпуса."></button>
+          <button class="hotspot" style="left:58%;top:59%" data-title="Безель" data-text="Внешнее кольцо вокруг циферблата визуально отделяет стекло от корпуса и подчёркивает спортивный характер часов."></button>
+          <button class="hotspot" style="left:28%;top:61%" data-title="Стальной браслет" data-text="Металлические звенья отражают свет по‑разному под каждым углом. Именно такие детали особенно выигрывают от настоящей фотографии высокого разрешения."></button>
+        </div>
 
-    const camera = new THREE.PerspectiveCamera(
-      35,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      100
-    );
+        <div class="tools">
+          <button class="tool" id="zoomOut" aria-label="Уменьшить">−</button>
+          <button class="tool" id="zoomIn" aria-label="Увеличить">+</button>
+          <button class="tool" id="rotateLeft" aria-label="Повернуть влево">↶</button>
+          <button class="tool" id="rotateRight" aria-label="Повернуть вправо">↷</button>
+          <button class="tool" id="resetView">Сброс</button>
+        </div>
 
-    camera.position.set(0, 0, 8);
+        <aside class="info-card" id="infoCard">
+          <small>Наведи на точку</small>
+          <h3 id="infoTitle">Циферблат</h3>
+          <p id="infoText">Главная зона часов: крупные индексы, стрелки и хронографические счётчики. Наведение не открывает отдельное окно — объяснение всегда остаётся аккуратно справа снизу.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true
-    });
+  <footer>
+    <span>Concept website / G‑SPORT</span>
+    <span>Photography sourced from Unsplash. Interactive viewer uses real photography, not a 3D model.</span>
+  </footer>
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+  <script>
+    const viewer = document.getElementById('viewer');
+    const inner = document.getElementById('explorerInner');
+    const title = document.getElementById('infoTitle');
+    const text = document.getElementById('infoText');
+    const hotspots = [...document.querySelectorAll('.hotspot')];
 
-    document.body.prepend(renderer.domElement);
+    let x = 0, y = 0, scale = 1, rotation = 0;
+    let dragging = false, startX = 0, startY = 0, baseX = 0, baseY = 0;
 
-    const controls = new OrbitControls(camera, renderer.domElement);
-
-    controls.enableDamping = true;
-    controls.enablePan = false;
-    controls.minDistance = 5;
-    controls.maxDistance = 11;
-
-    const watch = new THREE.Group();
-    scene.add(watch);
-
-    // materials
-
-    const caseMaterial = new THREE.MeshStandardMaterial({
-      color: 0x181818,
-      metalness: 1,
-      roughness: 0.22
-    });
-
-    const dialMaterial = new THREE.MeshStandardMaterial({
-      color: 0x0b4d78,
-      metalness: 0.65,
-      roughness: 0.34
-    });
-
-    const steelMaterial = new THREE.MeshStandardMaterial({
-      color: 0xb9bec5,
-      metalness: 1,
-      roughness: 0.28
-    });
-
-    const darkMetal = new THREE.MeshStandardMaterial({
-      color: 0x242424,
-      metalness: 1,
-      roughness: 0.3
-    });
-
-    const glassMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transmission: 0.85,
-      transparent: true,
-      opacity: 0.32,
-      roughness: 0.04,
-      metalness: 0,
-      thickness: 0.15
-    });
-
-    // case
-
-    const caseGeometry = new THREE.CylinderGeometry(
-      1.7,
-      1.7,
-      0.42,
-      96
-    );
-
-    const watchCase = new THREE.Mesh(
-      caseGeometry,
-      caseMaterial
-    );
-
-    watchCase.rotation.x = Math.PI / 2;
-    watch.add(watchCase);
-
-    // bezel
-
-    const bezelGeometry = new THREE.TorusGeometry(
-      1.5,
-      0.12,
-      24,
-      96
-    );
-
-    const bezel = new THREE.Mesh(
-      bezelGeometry,
-      steelMaterial
-    );
-
-    bezel.position.z = 0.23;
-    watch.add(bezel);
-
-    // dial
-
-    const dialGeometry = new THREE.CylinderGeometry(
-      1.38,
-      1.38,
-      0.09,
-      96
-    );
-
-    const dial = new THREE.Mesh(
-      dialGeometry,
-      dialMaterial
-    );
-
-    dial.rotation.x = Math.PI / 2;
-    dial.position.z = 0.24;
-
-    watch.add(dial);
-
-    // glass
-
-    const glassGeometry = new THREE.CylinderGeometry(
-      1.42,
-      1.42,
-      0.06,
-      96
-    );
-
-    const glass = new THREE.Mesh(
-      glassGeometry,
-      glassMaterial
-    );
-
-    glass.rotation.x = Math.PI / 2;
-    glass.position.z = 0.34;
-
-    watch.add(glass);
-
-    // hour markers
-
-    for (let i = 0; i < 12; i++) {
-
-      const marker = new THREE.Mesh(
-        new THREE.BoxGeometry(
-          i % 3 === 0 ? 0.09 : 0.055,
-          i % 3 === 0 ? 0.3 : 0.2,
-          0.04
-        ),
-        steelMaterial
-      );
-
-      const angle = (i / 12) * Math.PI * 2;
-
-      marker.position.set(
-        Math.sin(angle) * 1.12,
-        Math.cos(angle) * 1.12,
-        0.32
-      );
-
-      marker.rotation.z = -angle;
-
-      watch.add(marker);
+    function clamp(v,min,max){ return Math.min(max,Math.max(min,v)); }
+    function render(){
+      inner.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${scale}) rotate(${rotation}deg)`;
     }
 
-    // hands
-
-    function createHand(width, length, color, z) {
-
-      const material = new THREE.MeshStandardMaterial({
-        color,
-        metalness: 0.8,
-        roughness: 0.2
-      });
-
-      const hand = new THREE.Mesh(
-        new THREE.BoxGeometry(width, length, 0.03),
-        material
-      );
-
-      hand.position.y = length / 2 - 0.05;
-      hand.position.z = z;
-
-      return hand;
-    }
-
-    const hourHand = createHand(
-      0.1,
-      0.62,
-      0xdedede,
-      0.38
-    );
-
-    hourHand.rotation.z = 0.7;
-
-    const minuteHand = createHand(
-      0.07,
-      0.95,
-      0xf0f0f0,
-      0.39
-    );
-
-    minuteHand.rotation.z = -1.1;
-
-    watch.add(hourHand);
-    watch.add(minuteHand);
-
-    // center pin
-
-    const pin = new THREE.Mesh(
-      new THREE.CylinderGeometry(
-        0.09,
-        0.09,
-        0.08,
-        40
-      ),
-      steelMaterial
-    );
-
-    pin.rotation.x = Math.PI / 2;
-    pin.position.z = 0.41;
-    watch.add(pin);
-
-    // subdials
-
-    const subPositions = [
-      [-0.62, 0.25],
-      [0.62, 0.25],
-      [0, -0.62]
-    ];
-
-    subPositions.forEach(([x, y]) => {
-
-      const sub = new THREE.Mesh(
-        new THREE.CylinderGeometry(
-          0.34,
-          0.34,
-          0.025,
-          64
-        ),
-        darkMetal
-      );
-
-      sub.rotation.x = Math.PI / 2;
-      sub.position.set(x, y, 0.34);
-
-      watch.add(sub);
-
-      const ring = new THREE.Mesh(
-        new THREE.TorusGeometry(
-          0.3,
-          0.018,
-          12,
-          64
-        ),
-        steelMaterial
-      );
-
-      ring.position.set(x, y, 0.365);
-
-      watch.add(ring);
+    viewer.addEventListener('pointerdown', e => {
+      if(e.target.closest('.tool') || e.target.closest('.hotspot')) return;
+      dragging = true;
+      viewer.classList.add('dragging');
+      viewer.setPointerCapture(e.pointerId);
+      startX = e.clientX; startY = e.clientY;
+      baseX = x; baseY = y;
     });
 
-    // crown
-
-    const crown = new THREE.Mesh(
-      new THREE.CylinderGeometry(
-        0.18,
-        0.18,
-        0.34,
-        32
-      ),
-      steelMaterial
-    );
-
-    crown.rotation.z = Math.PI / 2;
-    crown.position.set(1.82, 0, 0);
-
-    watch.add(crown);
-
-    // side buttons
-
-    [-0.48, 0.48].forEach(y => {
-
-      const button = new THREE.Mesh(
-        new THREE.CylinderGeometry(
-          0.13,
-          0.13,
-          0.3,
-          32
-        ),
-        darkMetal
-      );
-
-      button.rotation.z = Math.PI / 2;
-
-      button.position.set(
-        1.78,
-        y,
-        0
-      );
-
-      watch.add(button);
+    viewer.addEventListener('pointermove', e => {
+      if(!dragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      x = baseX + dx * .45;
+      y = baseY + dy * .45;
+      rotation = clamp(rotation + dx * .012, -18, 18);
+      render();
     });
 
-    // bracelet helper
+    function stopDrag(){ dragging = false; viewer.classList.remove('dragging'); }
+    viewer.addEventListener('pointerup', stopDrag);
+    viewer.addEventListener('pointercancel', stopDrag);
 
-    function strapPart(y) {
+    viewer.addEventListener('wheel', e => {
+      e.preventDefault();
+      scale = clamp(scale + (e.deltaY < 0 ? .09 : -.09), .75, 2.25);
+      render();
+    }, {passive:false});
 
-      const strap = new THREE.Mesh(
-        new THREE.BoxGeometry(
-          1.25,
-          2.4,
-          0.2,
-          16,
-          24,
-          4
-        ),
-        darkMetal
-      );
+    document.getElementById('zoomIn').onclick = () => { scale = clamp(scale + .15,.75,2.25); render(); };
+    document.getElementById('zoomOut').onclick = () => { scale = clamp(scale - .15,.75,2.25); render(); };
+    document.getElementById('rotateLeft').onclick = () => { rotation -= 10; render(); };
+    document.getElementById('rotateRight').onclick = () => { rotation += 10; render(); };
+    document.getElementById('resetView').onclick = () => { x=0;y=0;scale=1;rotation=0;render(); };
 
-      strap.position.y = y;
-
-      return strap;
-    }
-
-    const topStrap = strapPart(2.62);
-    const bottomStrap = strapPart(-2.62);
-
-    watch.add(topStrap);
-    watch.add(bottomStrap);
-
-    // mesh lines
-
-    for (let i = -5; i <= 5; i++) {
-
-      const x = i * 0.1;
-
-      [-2.62, 2.62].forEach(y => {
-
-        const line = new THREE.Mesh(
-          new THREE.BoxGeometry(
-            0.015,
-            2.25,
-            0.225
-          ),
-          steelMaterial
-        );
-
-        line.position.set(x, y, 0);
-
-        watch.add(line);
-      });
-    }
-
-    // lighting
-
-    const ambient = new THREE.AmbientLight(
-      0xffffff,
-      1.6
-    );
-
-    scene.add(ambient);
-
-    const keyLight = new THREE.DirectionalLight(
-      0xffffff,
-      5
-    );
-
-    keyLight.position.set(4, 5, 8);
-    scene.add(keyLight);
-
-    const blueLight = new THREE.PointLight(
-      0x347dff,
-      30,
-      18
-    );
-
-    blueLight.position.set(-5, 0, 5);
-    scene.add(blueLight);
-
-    const rimLight = new THREE.PointLight(
-      0xffffff,
-      18,
-      14
-    );
-
-    rimLight.position.set(4, -3, 2);
-    scene.add(rimLight);
-
-    watch.rotation.x = 0.25;
-    watch.rotation.y = -0.4;
-
-    // scroll animation
+    hotspots.forEach(h => {
+      const show = () => {
+        hotspots.forEach(p => p.classList.remove('active'));
+        h.classList.add('active');
+        title.textContent = h.dataset.title;
+        text.textContent = h.dataset.text;
+      };
+      h.addEventListener('mouseenter', show);
+      h.addEventListener('focus', show);
+      h.addEventListener('click', e => { e.stopPropagation(); show(); });
+    });
 
     window.addEventListener('scroll', () => {
-
-      const maxScroll =
-        document.body.scrollHeight -
-        window.innerHeight;
-
-      const progress =
-        window.scrollY / maxScroll;
-
-      watch.rotation.y =
-        -0.4 + progress * Math.PI * 2.3;
-
-      watch.rotation.x =
-        0.25 + progress * 1.35;
-
-      camera.position.z =
-        8 - Math.sin(progress * Math.PI) * 1.7;
-
-      camera.position.x =
-        Math.sin(progress * Math.PI * 2) * 0.9;
-    });
-
-    // configuration
-
-    document.querySelectorAll('[data-dial]')
-      .forEach(button => {
-
-        button.addEventListener('click', () => {
-
-          dialMaterial.color.set(
-            button.dataset.dial
-          );
-
-        });
-
-      });
-
-    document.querySelectorAll('[data-case]')
-      .forEach(button => {
-
-        button.addEventListener('click', () => {
-
-          caseMaterial.color.set(
-            button.dataset.case
-          );
-
-        });
-
-      });
-
-    document
-      .getElementById('reset')
-      .addEventListener('click', () => {
-
-        watch.rotation.set(
-          0.25,
-          -0.4,
-          0
-        );
-
-        camera.position.set(
-          0,
-          0,
-          8
-        );
-
-        controls.target.set(
-          0,
-          0,
-          0
-        );
-
-      });
-
-    function animate() {
-
-      requestAnimationFrame(animate);
-
-      controls.update();
-
-      renderer.render(
-        scene,
-        camera
-      );
-
-    }
-
-    animate();
-
-    window.addEventListener(
-      'resize',
-      () => {
-
-        camera.aspect =
-          window.innerWidth /
-          window.innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-          window.innerWidth,
-          window.innerHeight
-        );
-
+      const hero = document.querySelector('.hero-image');
+      if(window.scrollY < innerHeight * 1.3){
+        hero.style.transform = `scale(${1.04 + window.scrollY/innerHeight*.035}) translateY(${window.scrollY*.035}px)`;
       }
-    );
-
+    }, {passive:true});
   </script>
-
 </body>
 </html>
