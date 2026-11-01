@@ -15,8 +15,6 @@ html=html.replace("renderer.setPixelRatio(Math.min(devicePixelRatio,2.15));compo
 html=html.replace("bloom.strength=.24+st.mech*.38;","bloom.strength=.085+st.mech*.24;bloom.radius=.36;bloom.threshold=.92;");
 html=html.replace("key.position.set(4.5,5.5,7);rim.position.set(-4,1,4);goldLight.position.set(3,-2,2);fillLight.position.set(-5,3,6);","key.position.set(4.5,5.5,7);key.castShadow=true;key.shadow.mapSize.set(4096,4096);key.shadow.bias=-.0001;key.shadow.normalBias=.01;rim.position.set(-4,1,4);goldLight.position.set(3,-2,2);fillLight.position.set(-5,3,6);");
 html=html.replace("const now=performance.now()*.001;atmosphereRoot.rotation.y+=dt*.006;","const now=performance.now()*.001;key.position.x=4.5+Math.sin(now*.24)*.48;key.position.y=5.5+Math.cos(now*.19)*.24;rim.position.x=-4+Math.sin(now*.16+1.7)*.3;goldLight.position.y=-2+Math.cos(now*.14)*.2;fillLight.position.x=-5+Math.sin(now*.12+2.4)*.26;atmosphereRoot.rotation.y+=dt*.006;");
-html=html.replace("zoomMul=1, lightMul=.68","zoomMul=1.3, lightMul=.68");
-html=html.replace("zoomMul=1;freeMode=false","zoomMul=1.3;freeMode=false");
 return html;
 };
 })();
