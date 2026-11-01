@@ -11,7 +11,11 @@ const { UnrealBloomPass } = await import('three/addons/postprocessing/UnrealBloo
 const packed = a + b;
 const bytes = Uint8Array.from(atob(packed), c => c.charCodeAt(0));
 const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-const code = await new Response(stream).text();
+let code = await new Response(stream).text();
+
+// The packed source was originally an ES module. Remove only its top-level
+// import declarations because the same dependencies are injected below.
+code = code.replace(/^import\s+[^;]+;\s*/gm, '');
 
 new Function(
   'THREE',
