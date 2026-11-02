@@ -1,78 +1,86 @@
 (function(){
 const G=window.GSportPatches=window.GSportPatches||{};
 G.applyLiveWatch=function(html){
-  if(!html||html.includes('GS_FINAL_HANDS_V3'))return html;
+  if(!html||html.includes('GS_NATIVE_HANDS_ONLY_V4'))return html;
   const helper=`
-/* GS_FINAL_HANDS_V3: keep every generated hand in the exact dial plane */
+/* GS_NATIVE_HANDS_ONLY_V4: never create geometry; animate native dial hand meshes only */
 let gsHandsReady=false,gsSecondHand=null,gsMinuteHand=null,gsHourHand=null;
-function gsStats(m){
+function gsHandInfo(m){
   try{
     if(!m?.geometry)return null;
     m.geometry.computeBoundingBox?.();
     const b=m.geometry.boundingBox;if(!b)return null;
-    const sx=Math.abs(m.scale?.x??1),sy=Math.abs(m.scale?.y??1),sz=Math.abs(m.scale?.z??1);
-    const x=(b.max.x-b.min.x)*sx,y=(b.max.y-b.min.y)*sy,z=(b.max.z-b.min.z)*sz;
-    const dims=[['x',x],['y',y],['z',z]].sort((a,b)=>b[1]-a[1]);
-    const axis=dims[0][0];
-    const rawMin=axis==='x'?b.min.x:axis==='y'?b.min.y:b.min.z;
-    const rawMax=axis==='x'?b.max.x:axis==='y'?b.max.y:b.max.z;
-    const axisScale=axis==='x'?sx:axis==='y'?sy:sz;
-    const sign=Math.abs(rawMax)>=Math.abs(rawMin)?1:-1;
-    const radius=Math.max(Math.abs(rawMin),Math.abs(rawMax))*axisScale;
-    return {axis,sign,radius,len:dims[0][1],mid:dims[1][1],thin:dims[2][1],ratio:dims[0][1]/Math.max(dims[1][1],.0001)};
+    const s=b.getSize(new THREE.Vector3());
+    const sx=Math.abs((m.scale&&m.scale.x)||1),sy=Math.abs((m.scale&&m.scale.y)||1),sz=Math.abs((m.scale&&m.scale.z)||1);
+    const dims=[Math.abs(s.x*sx),Math.abs(s.y*sy),Math.abs(s.z*sz)].sort((a,b)=>b-a);
+    const len=dims[0],mid=dims[1],thin=dims[2];
+    return {m,len,mid,thin,ratio:len/Math.max(mid,.0001),p:m.position.clone(),parent:m.parent};
   }catch(e){return null}
 }
-function gsName(m){
+function gsLabel(m){
   try{return (typeof signature==='function'?signature(m):((m?.name||'')+' '+(m?.material?.name||''))).toLowerCase()}catch(e){return ''}
 }
-function gsPickSecond(all){
-  const named=all.find(m=>/second|seconds|sec[_ -]?hand|secondhand|sekund/.test(gsName(m)));
-  if(named)return named;
-  return all.map(m=>({m,s:gsStats(m)})).filter(x=>x.s&&x.s.len>.05&&x.s.ratio>1.3).sort((a,b)=>(b.s.ratio*b.s.len)-(a.s.ratio*a.s.len))[0]?.m||all[0]||null;
+function gsDist(a,b){return a.p.distanceTo(b.p)}
+function gsNativeCandidates(all){
+  let list=all.map(gsHandInfo).filter(x=>x&&x.len>.04&&x.ratio>1.18);
+  if(list.length<3)list=all.map(gsHandInfo).filter(x=>x&&x.len>.025&&x.ratio>1.05);
+  return list;
 }
-function gsMaterial(kind){
-  return new THREE.MeshPhysicalMaterial({
-    color:kind==='hour'?0xd6bd84:0xe9e4d8,
-    metalness:.9,roughness:.12,clearcoat:.75,clearcoatRoughness:.05,
-    depthTest:true,depthWrite:true,transparent:false,
-    polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3
-  });
-}
-function gsMakeFlatHand(anchor,kind){
-  const s=gsStats(anchor);if(!anchor?.parent||!s)return null;
-  if(s.axis==='z')return null;
-  const length=Math.max(.08,s.radius*(kind==='hour'?.54:.78));
-  const width=Math.max(s.mid*(kind==='hour'?1.45:1.02),length*(kind==='hour'?.085:.055),.018);
-  const depth=Math.max(Math.min(s.thin*.55,width*.22),.006);
-  const geom=s.axis==='x'?new THREE.BoxGeometry(length,width,depth):new THREE.BoxGeometry(width,length,depth);
-  const mesh=new THREE.Mesh(geom,gsMaterial(kind));
-  const group=new THREE.Group();group.name='gs-final-'+kind+'-hand';group.userData.gsGenerated=true;group.userData.gsKind=kind;
-  group.position.copy(anchor.position);group.rotation.copy(anchor.rotation);group.scale.set(1,1,1);
-  mesh.position.set(0,0,0);
-  if(s.axis==='x')mesh.position.x=s.sign*length*.5;else mesh.position.y=s.sign*length*.5;
-  /* same dial plane as the working second hand; no rear-mechanism offset */
-  mesh.position.z=0;
-  mesh.castShadow=true;mesh.receiveShadow=false;mesh.frustumCulled=false;mesh.renderOrder=20;
-  group.add(mesh);anchor.parent.add(group);
-  group.userData.gsBaseRot=group.rotation.clone();
-  return group;
+function gsPickNativeHands(all){
+  const info=gsNativeCandidates(all);if(!info.length)return null;
+  const named={second:null,minute:null,hour:null};
+  for(const x of info){
+    const n=gsLabel(x.m);
+    if(!named.second&&/second|seconds|sec[_ -]?hand|secondhand|sekund/.test(n))named.second=x;
+    else if(!named.minute&&/minute|min[_ -]?hand|minutehand|minut/.test(n))named.minute=x;
+    else if(!named.hour&&/hour|hr[_ -]?hand|hourhand|chas/.test(n))named.hour=x;
+  }
+  const anchors=[named.second,named.minute,named.hour].filter(Boolean);
+  let pool=info.slice();
+  if(anchors.length){
+    const p=anchors[0];
+    const near=pool.filter(x=>x.parent===p.parent&&gsDist(x,p)<.45);
+    if(near.length>=3)pool=near;
+  }else{
+    let best=[];
+    for(const seed of pool){
+      const cluster=pool.filter(x=>x.parent===seed.parent&&gsDist(x,seed)<.45);
+      if(cluster.length>best.length)best=cluster;
+    }
+    if(best.length>=3)pool=best;
+  }
+  const used=new Set();
+  let second=named.second&&pool.includes(named.second)?named.second:null;
+  let minute=named.minute&&pool.includes(named.minute)?named.minute:null;
+  let hour=named.hour&&pool.includes(named.hour)?named.hour:null;
+  if(second)used.add(second.m);if(minute)used.add(minute.m);if(hour)used.add(hour.m);
+  let remain=pool.filter(x=>!used.has(x.m));
+  if(!second&&remain.length){second=remain.slice().sort((a,b)=>(b.ratio*b.len)-(a.ratio*a.len))[0];used.add(second.m);remain=pool.filter(x=>!used.has(x.m))}
+  if(!minute&&remain.length){minute=remain.slice().sort((a,b)=>b.len-a.len)[0];used.add(minute.m);remain=pool.filter(x=>!used.has(x.m))}
+  if(!hour&&remain.length){hour=remain.slice().sort((a,b)=>a.len-b.len)[0];used.add(hour.m)}
+  if(!(second&&minute&&hour))return null;
+  return {second:second.m,minute:minute.m,hour:hour.m};
 }
 function gsPrepareHands(){
   if(gsHandsReady)return;
   if(typeof partMeshes==='undefined'||!partMeshes?.hands?.length)return;
-  const all=partMeshes.hands.filter(Boolean),anchor=gsPickSecond(all);if(!anchor?.parent)return;
-  /* remove every older generated fallback if an old script ever created one */
-  [...anchor.parent.children].forEach(o=>{if(o?.userData?.gsGenerated||/^gs-(generated|final)-/.test(o?.name||''))anchor.parent.remove(o)});
-  if(!anchor.userData.gsBaseRot)anchor.userData.gsBaseRot=anchor.rotation.clone();
-  gsSecondHand=anchor;
-  gsMinuteHand=gsMakeFlatHand(anchor,'minute');
-  gsHourHand=gsMakeFlatHand(anchor,'hour');
-  gsHandsReady=!!(gsSecondHand&&gsMinuteHand&&gsHourHand);
+  const all=partMeshes.hands.filter(Boolean);
+  /* purge every object created by older broken hand patches */
+  const parents=new Set(all.map(m=>m?.parent).filter(Boolean));
+  parents.forEach(p=>[...p.children].forEach(o=>{
+    const n=o?.name||'';
+    if(o?.userData?.gsGenerated||/^gs-(generated|final)-/.test(n))p.remove(o);
+  }));
+  const pick=gsPickNativeHands(all);if(!pick)return;
+  gsSecondHand=pick.second;gsMinuteHand=pick.minute;gsHourHand=pick.hour;
+  [gsSecondHand,gsMinuteHand,gsHourHand].forEach(m=>{if(!m.userData.gsBaseRot)m.userData.gsBaseRot=m.rotation.clone()});
+  console.info('G-SPORT native hands',gsLabel(gsSecondHand),gsLabel(gsMinuteHand),gsLabel(gsHourHand));
+  gsHandsReady=true;
 }
 function gsRotate(m,angle){
   if(!m)return;
   const b=m.userData.gsBaseRot||(m.userData.gsBaseRot=m.rotation.clone());
-  m.rotation.set(b.x,b.y,b.z-angle,b.order);m.visible=true;m.matrixWorldNeedsUpdate=true;
+  m.rotation.set(b.x,b.y,b.z-angle,b.order);m.matrixWorldNeedsUpdate=true;
 }
 function updateLiveHands(){
   if(typeof loaded!=='undefined'&&!loaded)return;
