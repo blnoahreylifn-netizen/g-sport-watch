@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>KING KONG ENERGY — Unleash the Energy</title>
+<meta name="description" content="KING KONG Energy — интерактивный промо-сайт вкусов Mango, Original, Berry и Tropic." />
+<style>
+:root{
+  --bg:#070809;--fg:#f5f1e8;--muted:#8f9297;--gold:#d4a83f;
+  --accent:#1688ff;--accent2:#0f57c7;--glow:rgba(22,136,255,.38);
+  --mx:0;--my:0;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth;background:#050607}body{margin:0;background:#050607;color:var(--fg);font-family:Inter,Arial,Helvetica,sans-serif;overflow-x:hidden}
+button,a{font:inherit;color:inherit}button{border:0}
+.noise{position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.055;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E")}
+.topbar{position:fixed;left:0;right:0;top:0;z-index:80;display:flex;align-items:center;justify-content:space-between;padding:22px 32px;mix-blend-mode:normal}
+.brand{font-weight:950;letter-spacing:-.055em;font-size:24px;line-height:.8}.brand span{display:block;font-size:8px;letter-spacing:.34em;color:var(--gold);margin-top:8px;font-weight:800}
+.nav{display:flex;gap:8px;align-items:center}.nav a,.sound{padding:10px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.11);background:rgba(5,6,7,.38);backdrop-filter:blur(16px);font-size:9px;font-weight:800;letter-spacing:.13em;text-decoration:none;color:#c7c9cb}
+.hero{min-height:100svh;position:relative;overflow:hidden;display:grid;place-items:center;background:
+ radial-gradient(circle at calc(50% + var(--mx)*10%) calc(42% + var(--my)*8%),var(--glow),transparent 27%),
+ radial-gradient(circle at 50% 120%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 36%),
+ linear-gradient(180deg,#101215 0%,#070809 55%,#050607 100%);transition:background .6s ease}
+.hero:before{content:"";position:absolute;inset:-30%;background:conic-gradient(from 90deg at 50% 50%,transparent 0 32%,color-mix(in srgb,var(--accent) 12%,transparent) 38%,transparent 45% 100%);animation:spinLight 16s linear infinite;opacity:.65;filter:blur(34px)}
+@keyframes spinLight{to{transform:rotate(360deg)}}
+.hero-copy{position:absolute;left:7vw;top:50%;transform:translateY(-50%);z-index:8;max-width:410px;pointer-events:none}
+.kicker{font-size:10px;font-weight:850;letter-spacing:.38em;color:var(--accent);margin-bottom:16px}.hero h1{margin:0;font-size:clamp(54px,8.8vw,152px);line-height:.72;letter-spacing:-.075em;font-weight:950;text-transform:uppercase;text-shadow:0 8px 45px rgba(0,0,0,.55)}
+.hero h1 .stroke{display:block;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.32);font-size:.48em;letter-spacing:.06em;margin-top:22px}.hero p{max-width:310px;color:#a5a7aa;font-size:12px;line-height:1.6;margin:24px 0 0}
+.stage{position:absolute;inset:0;z-index:5;perspective:1200px;transform-style:preserve-3d}
+.orbit{position:absolute;left:50%;top:50%;width:min(92vw,1180px);height:min(67vh,620px);transform:translate(-50%,-47%);transform-style:preserve-3d}
+.can-wrap{position:absolute;left:50%;top:50%;width:172px;height:390px;margin-left:-86px;margin-top:-195px;transform-style:preserve-3d;cursor:pointer;transition:transform .75s cubic-bezier(.2,.86,.2,1),filter .55s ease,opacity .55s ease;will-change:transform,filter}
+.can-wrap:not(.active){filter:brightness(.24) saturate(.45) contrast(.92) blur(.15px);opacity:.74}
+.can-wrap.active{filter:brightness(1.05) saturate(1.15);opacity:1;z-index:20}
+.can{position:absolute;inset:0;border-radius:31px 31px 28px 28px;overflow:hidden;box-shadow:inset 12px 0 18px rgba(255,255,255,.12),inset -18px 0 28px rgba(0,0,0,.45),0 36px 80px rgba(0,0,0,.46);background:linear-gradient(90deg,#151719 0%,var(--c1) 18%,#101112 49%,var(--c2) 79%,#090a0b 100%)}
+.can:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(64deg,transparent 0 11px,rgba(255,255,255,.045) 12px 13px),repeating-linear-gradient(-66deg,transparent 0 17px,rgba(255,255,255,.035) 18px 19px);mix-blend-mode:screen;opacity:.85}
+.can:after{content:"";position:absolute;left:0;right:0;top:0;height:20px;border-radius:40px 40px 10px 10px;background:linear-gradient(#d8dbdc,#7f8587 45%,#c5c9ca 60%,#5d6264 100%);box-shadow:0 2px 0 rgba(255,255,255,.28),0 9px 12px rgba(0,0,0,.3)}
+.rim{position:absolute;left:0;right:0;bottom:0;height:16px;border-radius:8px 8px 34px 34px;background:linear-gradient(#4f5456,#d6d8d8 55%,#7a7e80);z-index:5}
+.palm{position:absolute;inset:18px 0 18px;opacity:.28;background:radial-gradient(ellipse at 20% 10%,var(--c1),transparent 30%),radial-gradient(ellipse at 86% 90%,var(--c2),transparent 34%);mix-blend-mode:screen}
+.can-label{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-4deg);width:92%;text-align:center;z-index:6;font-weight:950;font-size:49px;line-height:.72;letter-spacing:-.075em;color:#d0a63a;text-shadow:0 2px 0 #6e5113,0 12px 20px rgba(0,0,0,.55)}
+.can-label b{display:block}.can-label i{display:block;font-style:normal;font-size:12px;line-height:1;letter-spacing:.03em;margin-top:28px;color:#111;background:var(--flavor);padding:8px 9px;border-radius:3px;text-shadow:none;transform:rotate(2deg)}
+.can-micro{position:absolute;top:31px;left:15px;right:15px;display:flex;justify-content:space-between;z-index:8;color:#dfd6c7;font-size:6px;letter-spacing:.18em;font-weight:900}
+.can-wrap.active .can{animation:activeFloat 3.4s ease-in-out infinite}
+@keyframes activeFloat{0%,100%{transform:translateY(-7px) rotate(-1.1deg)}50%{transform:translateY(9px) rotate(1.4deg)}}
+.glow-floor{position:absolute;left:50%;top:72%;width:380px;height:90px;transform:translateX(-50%);background:radial-gradient(ellipse,var(--glow),transparent 68%);filter:blur(16px);z-index:1;transition:.5s}
+.flavor-panel{position:absolute;right:6vw;top:50%;transform:translateY(-50%);z-index:30;width:260px;text-align:right}.flavor-no{font-size:10px;color:var(--accent);font-weight:900;letter-spacing:.24em}.flavor-name{font-size:46px;line-height:.88;font-weight:950;letter-spacing:-.055em;margin:9px 0}.flavor-desc{font-size:11px;line-height:1.55;color:#8f9396;margin-left:auto;max-width:215px}.dots{display:flex;justify-content:flex-end;gap:7px;margin-top:20px}.dot{width:8px;height:8px;border-radius:50%;background:#323538;border:1px solid rgba(255,255,255,.15);transition:.3s}.dot.active{width:27px;border-radius:9px;background:var(--accent);box-shadow:0 0 18px var(--glow)}
+.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:30;font-size:8px;letter-spacing:.23em;color:#6c7074;display:flex;align-items:center;gap:10px}.wheel{width:20px;height:31px;border:1px solid #51555a;border-radius:12px;position:relative}.wheel:after{content:"";position:absolute;width:3px;height:6px;border-radius:3px;background:var(--accent);left:8px;top:6px;animation:wheel 1.5s ease infinite}@keyframes wheel{to{transform:translateY(10px);opacity:0}}
+.section{min-height:100svh;position:relative;padding:120px 7vw;display:flex;align-items:center;overflow:hidden}.section.dark{background:#08090a}.section.gradient{background:radial-gradient(circle at 75% 50%,color-mix(in srgb,var(--accent) 15%,transparent),transparent 35%),#090a0b}.eyebrow{font-size:9px;letter-spacing:.3em;color:var(--accent);font-weight:900}.section h2{font-size:clamp(48px,8vw,118px);line-height:.82;letter-spacing:-.065em;margin:14px 0 22px;max-width:900px}.section p{color:#9b9da0;line-height:1.7;font-size:14px;max-width:520px}.stats{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:10px;margin-top:35px;max-width:650px}.stat{padding:20px;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:rgba(255,255,255,.025);backdrop-filter:blur(12px)}.stat strong{display:block;font-size:28px}.stat span{font-size:8px;letter-spacing:.18em;color:#71757a}
+.flavor-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%;margin-top:40px}.card{min-height:370px;border-radius:24px;border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden;padding:24px;cursor:pointer;transition:.35s;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.018))}.card:before{content:"";position:absolute;inset:auto -15% -25%;height:65%;background:radial-gradient(circle,var(--card),transparent 64%);filter:blur(10px);opacity:.55}.card:hover{transform:translateY(-9px);border-color:color-mix(in srgb,var(--card) 55%,white 8%)}.mini-can{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%) rotate(8deg);width:84px;height:196px;border-radius:17px;background:linear-gradient(90deg,#101112,var(--card),#0a0b0c,var(--card2));box-shadow:inset 7px 0 11px rgba(255,255,255,.13),0 22px 38px rgba(0,0,0,.45)}.mini-can:before{content:"KING\A KONG";white-space:pre;position:absolute;left:8px;right:8px;top:72px;text-align:center;font-weight:950;font-size:25px;line-height:.72;color:#d2a640}.card h3{position:absolute;bottom:43px;margin:0;font-size:24px;letter-spacing:-.04em}.card small{position:absolute;bottom:22px;color:#777b7f;font-size:8px;letter-spacing:.16em}
+.footer{padding:60px 7vw 80px;background:#050607;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;gap:20px;align-items:end}.footer .big{font-size:clamp(35px,6vw,94px);font-weight:950;letter-spacing:-.07em;line-height:.78}.footer small{color:#676b70;font-size:9px;line-height:1.6}
+@media(max-width:900px){.topbar{padding:16px}.nav a{display:none}.hero-copy{left:18px;top:120px;transform:none}.hero h1{font-size:60px}.hero p{display:none}.orbit{width:100vw;height:58vh;top:58%}.can-wrap{width:118px;height:270px;margin-left:-59px;margin-top:-135px}.can-label{font-size:34px}.can-label i{font-size:8px;margin-top:20px;padding:6px}.can-micro{font-size:4px;top:23px}.flavor-panel{right:18px;top:auto;bottom:76px;transform:none;width:220px}.flavor-name{font-size:34px}.flavor-desc{display:none}.glow-floor{top:70%;width:260px}.section{padding:100px 18px}.stats{grid-template-columns:1fr}.flavor-grid{grid-template-columns:1fr 1fr}.card{min-height:300px}.footer{padding:45px 18px 70px;display:block}.footer small{display:block;margin-top:24px}.scroll-hint{display:none}}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<header class="topbar"><div class="brand">KING KONG<span>ENERGY DRINK</span></div><nav class="nav"><a href="#flavors">FLAVORS</a><a href="#energy">ENERGY</a><button class="sound" id="soundBtn">SOUND OFF</button></nav></header>
+<main>
+<section class="hero" id="hero">
+  <div class="hero-copy"><div class="kicker">UNLEASH YOUR INSTINCT</div><h1>KING<br>KONG<span class="stroke">ENERGY</span></h1><p>Четыре вкуса. Один характер. Выбирай банку колесом мыши — остальные уходят в тень.</p></div>
+  <div class="stage"><div class="glow-floor"></div><div class="orbit" id="orbit"></div></div>
+  <aside class="flavor-panel"><div class="flavor-no" id="flavorNo">01 / 04</div><div class="flavor-name" id="flavorName">MANGO</div><div class="flavor-desc" id="flavorDesc">Сочный тропический профиль с холодным энергетическим финишем.</div><div class="dots" id="dots"></div></aside>
+  <div class="scroll-hint"><span class="wheel"></span> SCROLL TO SWITCH</div>
+</section>
+<section class="section dark" id="energy"><div><div class="eyebrow">BUILT FOR MOTION</div><h2>ENERGY THAT MOVES WITH YOU.</h2><p>Интерфейс реагирует на движение мыши, выбранный вкус и скролл. Активная банка всегда остаётся главным объектом сцены, остальные создают глубину и движение.</p><div class="stats"><div class="stat"><strong>4</strong><span>CORE FLAVORS</span></div><div class="stat"><strong>360°</strong><span>FLOAT MOTION</span></div><div class="stat"><strong>24/7</strong><span>ENERGY MODE</span></div></div></div></section>
+<section class="section gradient" id="flavors"><div style="width:100%"><div class="eyebrow">CHOOSE YOUR COLOR</div><h2>FIND YOUR KONG.</h2><div class="flavor-grid" id="flavorGrid"></div></div></section>
+</main>
+<footer class="footer"><div class="big">KING KONG<br>ENERGY</div><small>CONCEPT WEBSITE / 2026<br>DESIGNED AS A HIGH-IMPACT PRODUCT EXPERIENCE</small></footer>
+<script>
+const flavors=[
+ {name:'MANGO',desc:'Сочный тропический профиль с холодным энергетическим финишем.',c1:'#078eff',c2:'#004bba',flavor:'#55b7ff'},
+ {name:'ORIGINAL',desc:'Классический яркий вкус — чистая энергия без лишнего.',c1:'#58c72f',c2:'#13720e',flavor:'#92ec42'},
+ {name:'BERRY',desc:'Красные ягоды, кислинка и глубокий насыщенный характер.',c1:'#ff4a3c',c2:'#a40e16',flavor:'#ff5b50'},
+ {name:'TROPIC',desc:'Жёлтые фрукты и солнечная тропическая свежесть.',c1:'#ffd61f',c2:'#9e7400',flavor:'#ffe43e'}
+];
+const orbit=document.getElementById('orbit'),dots=document.getElementById('dots'),grid=document.getElementById('flavorGrid');
+let active=0,locked=false,touchX=0;
+function canHTML(f,i){return `<div class="can-wrap" data-i="${i}" style="--c1:${f.c1};--c2:${f.c2};--flavor:${f.flavor}"><div class="can"><div class="palm"></div><div class="can-micro"><span>TAURINE</span><span>CAFFEINE</span></div><div class="can-label"><b>KING</b><b>KONG</b><i>${f.name} ENERGY</i></div><div class="rim"></div></div></div>`}
+orbit.innerHTML=flavors.map(canHTML).join('');
+dots.innerHTML=flavors.map((_,i)=>`<span class="dot" data-i="${i}"></span>`).join('');
+grid.innerHTML=flavors.map((f,i)=>`<article class="card" data-i="${i}" style="--card:${f.c1};--card2:${f.c2}"><div class="mini-can"></div><h3>${f.name}</h3><small>SELECT FLAVOR 0${i+1}</small></article>`).join('');
+const cans=[...document.querySelectorAll('.can-wrap')],dotEls=[...document.querySelectorAll('.dot')];
+function shortestDelta(i,a){let d=i-a;if(d>2)d-=4;if(d<-2)d+=4;return d}
+function render(){const f=flavors[active];document.documentElement.style.setProperty('--accent',f.c1);document.documentElement.style.setProperty('--accent2',f.c2);document.documentElement.style.setProperty('--glow',f.c1+'66');document.getElementById('flavorNo').textContent=`0${active+1} / 04`;document.getElementById('flavorName').textContent=f.name;document.getElementById('flavorDesc').textContent=f.desc;
+ cans.forEach((c,i)=>{const d=shortestDelta(i,active);const abs=Math.abs(d);const x=d*205;const y=abs*34+(d===0?-8:14);const z=d===0?170:-abs*80;const r=d*11;const s=d===0?1.16:abs===1?.86:.67;c.classList.toggle('active',i===active);c.style.transform=`translate3d(${x}px,${y}px,${z}px) rotateY(${r}deg) rotateZ(${d*4}deg) scale(${s})`;});dotEls.forEach((d,i)=>d.classList.toggle('active',i===active));}
+function select(i){active=(i+flavors.length)%flavors.length;render()}
+cans.forEach(c=>c.addEventListener('click',()=>select(+c.dataset.i)));dotEls.forEach(d=>d.addEventListener('click',()=>select(+d.dataset.i)));document.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>{select(+c.dataset.i);document.getElementById('hero').scrollIntoView({behavior:'smooth'})}));
+window.addEventListener('wheel',e=>{const rect=document.getElementById('hero').getBoundingClientRect();if(rect.bottom>innerHeight*.45&&rect.top<innerHeight*.2){if(locked)return;locked=true;select(active+(e.deltaY>0?1:-1));setTimeout(()=>locked=false,420)}},{passive:true});
+window.addEventListener('pointermove',e=>{const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;document.documentElement.style.setProperty('--mx',x.toFixed(3));document.documentElement.style.setProperty('--my',y.toFixed(3));orbit.style.transform=`translate(-50%,-47%) rotateX(${(-y*3).toFixed(2)}deg) rotateY(${(x*4).toFixed(2)}deg)`},{passive:true});
+window.addEventListener('touchstart',e=>touchX=e.touches[0].clientX,{passive:true});window.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>35)select(active+(dx<0?1:-1))},{passive:true});
+let audioCtx,osc,gain;document.getElementById('soundBtn').onclick=()=>{const b=document.getElementById('soundBtn');if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)();osc=audioCtx.createOscillator();gain=audioCtx.createGain();osc.type='sine';osc.frequency.value=55;gain.gain.value=.018;osc.connect(gain).connect(audioCtx.destination);osc.start();b.textContent='SOUND ON'}else{if(audioCtx.state==='running'){audioCtx.suspend();b.textContent='SOUND OFF'}else{audioCtx.resume();b.textContent='SOUND ON'}}};
+render();
+</script>
+</body>
+</html>
